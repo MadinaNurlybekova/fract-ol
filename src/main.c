@@ -128,6 +128,77 @@ void draw_mandelbrot(void *p)
     mlx_image_to_window(f->mlx, f->img, 0, 0);
 }
 
+// =========================== MANDELBOX ==========================
+
+// v = s*ballFold(r, f*boxFold(v)) + c
+
+double boxFold(double v)
+{
+    if (v > 1.0)
+        v = 2.0 - v;
+    else if (v < -1.0)
+        v = - 2.0 - v;
+    return (v);
+}
+
+double magnitude(double m, double v)
+{
+    double scale = -1.1;
+    if (m < 0.5)
+        v *= 4;
+    else if (m < 1.0)
+        v = v / (m * m);
+    else
+        v = scale * v;
+    return (v);
+}
+
+void draw_mandelbox(void *p)
+{
+    t_fractal *f;
+    f = p;
+    int x, y;
+    int i;
+    double mr, mi;
+    double vx, vy;
+    double scale = 2;
+    double mag;
+
+    y = 0;
+    while (y < 4 * f->n)
+    {
+        x = 0;
+        while (x < 4 * f->n)
+        {
+			mr = f->min_r + (double)x * (f->max_r - f->min_r) / (f->n * 4);
+			mi = f->max_i + (double)y * (f->min_i - f->max_i) / (f->n * 4);
+            vx = mr;
+            vy = mi;
+            i = 1;
+            while (i <= f->max_iterations)
+            {
+                vx = boxFold(vx);
+                vy = boxFold(vy);
+                mag = sqrt(vx*vx + vy*vy);
+                if (vx*vx + vy*vy > 4.0)
+                    break;
+                vx = scale * magnitude(mag, vx) + mr;
+                vy = scale * magnitude(mag, vy) + mi;
+                i++;
+            }
+            if (i == f->max_iterations + 1)
+                mlx_put_pixel(f->img, x, y, foo(i + 999)); //black
+            else
+                mlx_put_pixel(f->img, x, y,  foo(i + 746)); //colored
+            x++;
+        }
+        y++;
+    }
+    mlx_image_to_window(f->mlx, f->img, 0, 0);
+}
+
+
+
 // void draw_mandelbrot(void *p)
 // {
 //     t_fractal *f;
@@ -198,7 +269,7 @@ int32_t    ft_fractal(char set)
     if (set == 'J')
         mlx_loop_hook(fractal->mlx, draw_julia_2, fractal);
     else if (set == 'M')
-        mlx_loop_hook(fractal->mlx, draw_mandelbrot, fractal);
+        mlx_loop_hook(fractal->mlx, draw_mandelbox, fractal);
         
     mlx_scroll_hook(fractal->mlx, scrollfunc, fractal);
 	mlx_loop(fractal->mlx);
