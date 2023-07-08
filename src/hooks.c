@@ -1,146 +1,144 @@
 #include "../includes/ft_fractol.h"
 
-// key hook
 void hook(void *ptr)
 {
-    t_fractal *fr;
-    fr = ptr;
+    t_fractal *f;
+    f = ptr;
+	double	center_r;
+	double	center_i;
+    double distance = 0.04;
 
-    if (mlx_is_key_down(fr->mlx, MLX_KEY_LEFT)){
-        fr->offset_x -= 0.4;
-        printf("%f", fr->offset_x );
-		puts("MLX_KEY_LEFT ");
-    }
-    if (mlx_is_key_down(fr->mlx, MLX_KEY_RIGHT)){
-        fr->offset_x += 0.4;
-        
-        puts("MLX_KEY_RIGHT ");
-    }
-    if (mlx_is_key_down(fr->mlx, MLX_KEY_UP)){
-        fr->offset_y += 0.4;
-        puts("MLX_KEY_UP ");
-    }
-    if (mlx_is_key_down(fr->mlx, MLX_KEY_DOWN)){
-        fr->offset_y -= 0.4;
-        puts("MLX_KEY_DOWN ");
-    }
-
+	center_r = f->max_r - f->min_r;
+	center_i = f->max_i - f->min_i;
+	if (mlx_is_key_down(f->mlx, MLX_KEY_RIGHT))
+	{
+		f->min_r += center_r * distance;
+		f->max_r += center_r * distance;
+	}
+	else if (mlx_is_key_down(f->mlx, MLX_KEY_LEFT))
+	{
+		f->min_r -= center_r * distance;
+		f->max_r -= center_r * distance;
+	}
+	else if (mlx_is_key_down(f->mlx, MLX_KEY_DOWN))
+	{
+		f->min_i -= center_i * distance;
+		f->max_i -= center_i * distance;
+	}
+	else if (mlx_is_key_down(f->mlx, MLX_KEY_UP))
+	{
+		f->min_i += center_i * distance;
+		f->max_i += center_i * distance;
+	}
 }
 
-// void my_scrollhook(double xdelta, double ydelta, void* param)
+// key hook
+// void hook(void *ptr)
 // {
-//     t_fractal *fractal;
-//     (void)xdelta;
+//     t_fractal *fr;
+//     fr = ptr;
 
-//     fractal = param;
-//     int x, y;
-//     mlx_get_mouse_pos(fractal->mlx, &(x), &(y));
-//     fractal->offset_x =  x/1000.;
-//     fractal->offset_y=  y/1000.;
-// 	if (ydelta > 0)
-// 		fractal->zoom ++;
-// 	else if (ydelta < 0)
-// 		fractal->zoom --;
-//     fractal->y_coord = 0;
-//     fractal->x_coord = 0; 
+//     if (mlx_is_key_down(fr->mlx, MLX_KEY_LEFT)){
+//         fr->offset_x -= 0.4;
+//         printf("%f", fr->offset_x );
+// 		puts("MLX_KEY_LEFT ");
+//     }
+//     if (mlx_is_key_down(fr->mlx, MLX_KEY_RIGHT)){
+//         fr->offset_x += 0.4;
+        
+//         puts("MLX_KEY_RIGHT ");
+//     }
+//     if (mlx_is_key_down(fr->mlx, MLX_KEY_UP)){
+//         fr->offset_y += 0.4;
+//         puts("MLX_KEY_UP ");
+//     }
+//     if (mlx_is_key_down(fr->mlx, MLX_KEY_DOWN)){
+//         fr->offset_y -= 0.4;
+//         puts("MLX_KEY_DOWN ");
+//     }
 // }
 
-// void my_scrollhook(double xdelta, double ydelta, void* param)
-// {
-//     t_fractal *fractal;
-// 	long double	len;
-//     long double	l = 0.0078125;
-//     int x, y;
-
-// 	fractal = param;
-// 	len = l;
-//     (void)xdelta;
-//     // long double w = fractal->n * 4;
-//     // long double h = fractal->n * 4;
-
-// 	mlx_get_mouse_pos(fractal->mlx, &(x), &(y));
-// 	if (ydelta < 0 && fractal->zoom > 1 && x >= 0
-// 		&& x <= fractal->n * 4 - 1 && y >= 0 && y <= fractal->n * 4 - 1)
-// 	{
-// 		fractal->zoom --;
-// 		l *= 1.25;
-// 	}
-// 	if (ydelta > 0 && fractal->zoom < (fractal->n * 4)/2 && x >= 0
-// 		&& x <= fractal->n * 4 && y>= 0 && y<= fractal->n * 4)
-// 	{
-// 		fractal->zoom ++;
-// 		l *= 0.8;
-// 	}
-// 	if (xdelta < 0)
-// 		fractal->zoom += 0;
-// 	fractal->x_coord += x * len - x * l;
-// 	fractal->y_coord += y * len - y * l;
-//     // fractal->x_coord = 0;
-//     // fractal->y_coord = 0;
-
-//     // fractal->x_coord += x - x * (w / fractal->zoom + fractal->zoom * 0.05);
-//     // fractal->y_coord += y - y * (h / fractal->zoom + fractal->zoom * 0.05);
-//     // w = w - (w / fractal->zoom + fractal->zoom * 0.05);
-//     // h = h - (h / fractal->zoom + fractal->zoom * 0.05);
-
-//     // fractal->x_coord += x - x * (w / 105);
-//     // fractal->y_coord += y - y * (h / 105);
-//     // w = w - (w / 105);
-//     // h = h - (h / 105);
-// }
-
-void my_scrollhook(double xdelta, double ydelta, void* param)
+static void	zoom(t_fractal *f, double zoom)
 {
-	double	zoom_level;
-    t_fractal *fractal;
-    int x, y;
+	double	center_r;
+	double	center_i;
 
-	fractal = param;
+	center_r = f->min_r - f->max_r;
+	center_i = f->max_i - f->min_i;
+	f->max_r = f->max_r + (center_r - zoom * center_r) / 2;
+	f->min_r = f->max_r + zoom * center_r;
+	f->min_i = f->min_i + (center_i - zoom * center_i) / 2;
+	f->max_i = f->min_i + zoom * center_i;
+}
+
+static void	move(t_fractal *f, double distance, char direction)
+{
+	double	center_r;
+	double	center_i;
+
+	center_r = f->max_r - f->min_r;
+	center_i = f->max_i - f->min_i;
+	if (direction == 'R')
+	{
+		f->min_r += center_r * distance;
+		f->max_r += center_r * distance;
+	}
+	else if (direction == 'L')
+	{
+		f->min_r -= center_r * distance;
+		f->max_r -= center_r * distance;
+	}
+	else if (direction == 'D')
+	{
+		f->min_i -= center_i * distance;
+		f->max_i -= center_i * distance;
+	}
+	else if (direction == 'U')
+	{
+		f->min_i += center_i * distance;
+		f->max_i += center_i * distance;
+	}
+}
+
+
+void    scrollfunc(double xdelta, double ydelta, void* param)
+{
+    t_fractal *f;
+    f = param;
     (void)xdelta;
 
-	zoom_level = 1.42;
-    mlx_get_mouse_pos(fractal->mlx, &(x), &(y));
-	if (ydelta > 0 && fractal->zoom < (fractal->n * 4)/2 && x >= 0
-		&& x <= fractal->n * 4 && y>= 0 && y<= fractal->n * 4)
-    {
-		fractal->offset_x = (x / fractal->zoom + fractal->offset_x) - (x
-				/ (fractal->zoom * zoom_level));
-		fractal->offset_y = (y / fractal->zoom + fractal->offset_y) - (y
-				/ (fractal->zoom * zoom_level));
-		fractal->zoom *= zoom_level;
-	}
-	if (ydelta < 0 && fractal->zoom > 1 && x >= 0
-		&& x <= fractal->n * 4 - 1 && y >= 0 && y <= fractal->n * 4 - 1)
+    int x, y;
+    mlx_get_mouse_pos(f->mlx, &(x), &(y));
+
+	if (ydelta > 0)
 	{
-		fractal->offset_x = (x / fractal->zoom + fractal->offset_x) - (x
-				/ (fractal->zoom / zoom_level));
-		fractal->offset_y = (y / fractal->zoom + fractal->offset_y) - (y
-				/ (fractal->zoom / zoom_level));
-		fractal->zoom /= zoom_level;
+		zoom(f, 0.5);
+		x -= (f->n*4)  / 2;
+		y -= (f->n*4)  / 2;
+		if (x < 0)
+		{
+			printf("1");
+			move(f, (double)x * -1 / (f->n*4) , 'L');
+		}
+		else if (x > 0)
+		{
+			printf("2");
+			move(f, (double)x / (f->n*4) , 'R');
+		}
+		if (y < 0)
+		{
+			printf("3");	
+			move(f, (double)y * -1 / (f->n*4) , 'U');
+		}
+		else if (y > 0)
+		{
+			printf("4");		
+			move (f, (double)y / (f->n*4) , 'D');
+		}
 	}
-    fractal->offset_x /= 1000.;
-    fractal->offset_y /= 1000.;
+	else if (ydelta < 0)
+	{
+		printf("4");
+		zoom(f, 2);
+	}
 }
-
-// void mouse_hook(void *ptr)
-// {
-//     t_fractal *fractal;
-//     fractal = ptr;
-
-//     int x, y;
-
-//     mlx_get_mouse_pos(fractal->mlx, &(x), &(y));
-//     if (mlx_is_mouse_down(fractal->mlx, MLX_MOUSE_BUTTON_MIDDLE))
-//     {
-//         printf("in");
-// 		zoom(fractal, x, y, 1);
-//     }
-// 	// if (mlx_is_mouse_down(fractal->mlx, MLX_MOUSE_BUTTON_MIDDLE))
-//     // {
-//     //     printf("out");
-// 	// 	zoom(fractal, x, y, -1);
-//     // }
-// }
-
-
-// mOffset = event->pos() - float(mZoomLevel) / float(oldZoomLevel) * (event->pos() - mOffset);

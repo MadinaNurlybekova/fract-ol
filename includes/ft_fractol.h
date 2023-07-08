@@ -6,7 +6,7 @@
 /*   By: mnurlybe <mnurlybe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:35:55 by mnurlybe          #+#    #+#             */
-/*   Updated: 2023/07/07 19:53:59 by mnurlybe         ###   ########.fr       */
+/*   Updated: 2023/07/08 14:42:38 by mnurlybe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,17 @@ typedef struct s_fractal
     double julia_x;
     double julia_y;
     double zoom;
+    double old_zoom;
     double offset_x;
     double offset_y;
+    double previous_offset_x;
+    double previous_offset_y;
+    
+	  double	min_r;
+	  double	max_r;
+	  double	min_i;
+	  double	max_i;
+    
 } t_fractal;
 
 typedef struct s_color
@@ -64,9 +73,13 @@ int foo(int continuous_index);
 
 // hooks
 void hook(void *ptr); //key
-void my_scrollhook(double xdelta, double ydelta, void* param); //zoom
+void scrollfunc(double xdelta, double ydelta, void* param);
+// void my_scrollhook(double xdelta, double ydelta, void* param); //zoom
 // void mouse_hook(void *ptr);
 // void	zoom(t_fractal *fractal, int x, int y, int zoom);
+
+
+void draw_julia_2(void *p);
 
 
 #endif
