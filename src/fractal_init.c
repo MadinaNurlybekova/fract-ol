@@ -2,7 +2,7 @@
 
 void    fractal_init(t_fractal *fractal)
 {
-    fractal->n = 200;
+    fractal->n = 100;
     fractal->max_iterations = 2000;
     fractal->x_coord = -2;
     fractal->y_coord = -2;
@@ -11,11 +11,11 @@ void    fractal_init(t_fractal *fractal)
     fractal->zoom = 1;
     fractal->offset_y = 0;
     fractal->offset_x = 0;
-    
-    fractal->min_i = -2.0;
-    fractal->max_i = 2.0;
 
+    fractal->min_i = -2.0;
 	fractal->min_r = -2.0;
 	fractal->max_r = 2.0;
-    // fractal->max_i = fractal->min_i + (fractal->max_r - fractal->min_r) * (fractal->n * 4) / (fractal->n * 4);
+    fractal->max_i = fractal->min_i + (fractal->max_r - fractal->min_r) * (fractal->n * 4) / (fractal->n * 4);
 }
+
+    // fractal->max_i = fractal->min_i + (fractal->max_r - fractal->min_r) * (fractal->n * 4) / (fractal->n * 4);

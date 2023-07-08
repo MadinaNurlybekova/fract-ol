@@ -50,8 +50,6 @@ void draw_julia_2(void *p)
     f = p;
 
     int x, y;
-	double	pr;
-	double	pi;
     int i;
     double	tmp;
 
@@ -61,17 +59,17 @@ void draw_julia_2(void *p)
         x = 0;
         while (x < 4 * f->n)
         {
-			pr = f->min_r + (double)x * (f->max_r - f->min_r) / (f->n * 4);
-			pi = f->max_i + (double)y * (f->min_i - f->max_i) / (f->n * 4);
+			f->a_real = f->min_r + (double)x * (f->max_r - f->min_r) / (f->n * 4);
+			f->b_img = f->max_i + (double)y * (f->min_i - f->max_i) / (f->n * 4);
 
             i = 1;
             while (i <= f->max_iterations)
             {
-                if ((pi * pi + pr * pr) > 4.0)
+                if ((f->b_img * f->b_img + f->a_real * f->a_real) > 4.0)
                     break ;
-                tmp = 2 * pr * pi + f->julia_y;
-                pr = pr * pr - pi * pi + f->julia_x;
-                pi = tmp;
+                tmp = 2 * f->a_real * f->b_img + f->julia_y;
+                f->a_real = f->a_real * f->a_real - f->b_img * f->b_img + f->julia_x;
+                f->b_img = tmp;
                 i++;
             }
             if (i == f->max_iterations + 1)
@@ -88,46 +86,87 @@ void draw_julia_2(void *p)
 
 
 // ================================ MANDELBROT ===========================
+
 void draw_mandelbrot(void *p)
 {
-    t_fractal *fractal;
-    fractal = p;
-    fractal->y_coord = 0;
-    fractal->x_coord = 0; 
-    double x;
-    double y;
-    double temp;
+    t_fractal *f;
+    f = p;
+
+    int x, y;
     int i;
-    
-    while (fractal->y_coord < 4 * fractal->n)
+    double	tmp;
+    double mr, mi;
+
+    y = 0;
+    while (y < 4 * f->n)
     {
-        y = 2 - (fractal->y_coord / fractal->n);
-        while (fractal->x_coord < 4 * fractal->n)
+        x = 0;
+        while (x < 4 * f->n)
         {
-            x = - 2 + (fractal->x_coord / fractal->n);
-            fractal->a_real = x/fractal->zoom - fractal->offset_x;
-            fractal->b_img = y/fractal->zoom - fractal->offset_y;
+			mr = f->min_r + (double)x * (f->max_r - f->min_r) / (f->n * 4);
+			mi = f->max_i + (double)y * (f->min_i - f->max_i) / (f->n * 4);
+            f->a_real = 0;
+            f->b_img = 0;
             i = 1;
-            while(i <= fractal->max_iterations)
+            while (i <= f->max_iterations)
             {
-                temp = fractal->a_real;
-                fractal->a_real = (fractal->a_real * fractal->a_real) - (fractal->b_img * fractal->b_img) + x;
-                fractal->b_img = (2 * temp * fractal->b_img) + y;
-                if ((fractal->a_real * fractal->a_real) + (fractal->b_img * fractal->b_img) > 16)
-                    break; 
+                if ((f->b_img * f->b_img + f->a_real * f->a_real) > 4.0)
+                    break ;
+                tmp = 2 * f->a_real * f->b_img + mi;
+                f->a_real = f->a_real * f->a_real - f->b_img * f->b_img + mr;
+                f->b_img = tmp;
                 i++;
             }
-            if (i == fractal->max_iterations + 1)
-                mlx_put_pixel(fractal->img, fractal->x_coord , fractal->y_coord, 0xFFFFFFFF); //black
+            if (i == f->max_iterations + 1)
+                mlx_put_pixel(f->img, x, y, foo(i + 999)); //black
             else
-                mlx_put_pixel(fractal->img, fractal->x_coord, fractal->y_coord,  foo(i + 250)); //colored
-            fractal->x_coord++;
+                mlx_put_pixel(f->img, x, y,  foo(i + 746)); //colored
+            x++;
         }
-        fractal->x_coord = 0;
-        fractal->y_coord++;
+        y++;
     }
-    mlx_image_to_window(fractal->mlx, fractal->img, 0, 0);
+    mlx_image_to_window(f->mlx, f->img, 0, 0);
 }
+
+// void draw_mandelbrot(void *p)
+// {
+//     t_fractal *f;
+//     f = p;
+//     double x = 0;
+//     double y = 0;
+//     double temp;
+//     int i;
+//     double zr, zi;
+    
+//     while (y < 4 * f->n)
+//     {
+//         while (x < 4 * f->n)
+//         {
+// 			zr = f->min_r + (double)x * (f->max_r - f->min_r) / (f->n * 4);
+// 			zi = f->max_i + (double)y * (f->min_i - f->max_i) / (f->n * 4);
+//             i = 1;
+//             f->a_real = 0;
+//             f->b_img = 0;
+//             while(i <= f->max_iterations)
+//             {
+//                 temp = f->a_real;
+//                 f->a_real = (f->a_real * f->a_real) - (f->b_img * f->b_img) + zr;
+//                 f->b_img = (2 * temp * f->b_img) + zi;
+//                 if ((f->a_real * f->a_real) + (f->b_img * f->b_img) > 16)
+//                     break; 
+//                 i++;
+//             }
+//             if (i == f->max_iterations + 1)
+//                 mlx_put_pixel(f->img, x , y, 0xFFFFFFFF); //black
+//             else
+//                 mlx_put_pixel(f->img, x, y,  foo(i + 250)); //colored
+//             x++;
+//         }
+//         x = 0;
+//         y++;
+//     }
+//     mlx_image_to_window(f->mlx, f->img, 0, 0);
+// }
 
 void ft_print_error(int error)
 {

@@ -12,23 +12,23 @@ void hook(void *ptr)
 	center_i = f->max_i - f->min_i;
 	if (mlx_is_key_down(f->mlx, MLX_KEY_RIGHT))
 	{
-		f->min_r += center_r * distance;
-		f->max_r += center_r * distance;
-	}
-	else if (mlx_is_key_down(f->mlx, MLX_KEY_LEFT))
-	{
 		f->min_r -= center_r * distance;
 		f->max_r -= center_r * distance;
 	}
-	else if (mlx_is_key_down(f->mlx, MLX_KEY_DOWN))
+	else if (mlx_is_key_down(f->mlx, MLX_KEY_LEFT))
 	{
-		f->min_i -= center_i * distance;
-		f->max_i -= center_i * distance;
+		f->min_r += center_r * distance;
+		f->max_r += center_r * distance;
 	}
-	else if (mlx_is_key_down(f->mlx, MLX_KEY_UP))
+	else if (mlx_is_key_down(f->mlx, MLX_KEY_DOWN))
 	{
 		f->min_i += center_i * distance;
 		f->max_i += center_i * distance;
+	}
+	else if (mlx_is_key_down(f->mlx, MLX_KEY_UP))
+	{
+		f->min_i -= center_i * distance;
+		f->max_i -= center_i * distance;
 	}
 }
 
