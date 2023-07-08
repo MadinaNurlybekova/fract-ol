@@ -32,32 +32,6 @@ void hook(void *ptr)
 	}
 }
 
-// key hook
-// void hook(void *ptr)
-// {
-//     t_fractal *fr;
-//     fr = ptr;
-
-//     if (mlx_is_key_down(fr->mlx, MLX_KEY_LEFT)){
-//         fr->offset_x -= 0.4;
-//         printf("%f", fr->offset_x );
-// 		puts("MLX_KEY_LEFT ");
-//     }
-//     if (mlx_is_key_down(fr->mlx, MLX_KEY_RIGHT)){
-//         fr->offset_x += 0.4;
-        
-//         puts("MLX_KEY_RIGHT ");
-//     }
-//     if (mlx_is_key_down(fr->mlx, MLX_KEY_UP)){
-//         fr->offset_y += 0.4;
-//         puts("MLX_KEY_UP ");
-//     }
-//     if (mlx_is_key_down(fr->mlx, MLX_KEY_DOWN)){
-//         fr->offset_y -= 0.4;
-//         puts("MLX_KEY_DOWN ");
-//     }
-// }
-
 static void	zoom(t_fractal *f, double zoom)
 {
 	double	center_r;
@@ -116,29 +90,32 @@ void    scrollfunc(double xdelta, double ydelta, void* param)
 		x -= (f->n*4)  / 2;
 		y -= (f->n*4)  / 2;
 		if (x < 0)
-		{
-			printf("1");
 			move(f, (double)x * -1 / (f->n*4) , 'L');
-		}
 		else if (x > 0)
-		{
-			printf("2");
 			move(f, (double)x / (f->n*4) , 'R');
-		}
 		if (y < 0)
-		{
-			printf("3");	
 			move(f, (double)y * -1 / (f->n*4) , 'U');
-		}
-		else if (y > 0)
-		{
-			printf("4");		
+		else if (y > 0)	
 			move (f, (double)y / (f->n*4) , 'D');
-		}
 	}
 	else if (ydelta < 0)
-	{
-		printf("4");
 		zoom(f, 2);
-	}
+}
+
+void move_julia(void *ptr)
+{
+    t_fractal *fractal;
+    fractal = ptr;
+
+    if (mlx_is_key_down(fractal->mlx, MLX_KEY_Z))
+        fractal->julia_x -= 0.005;
+
+    if (mlx_is_key_down(fractal->mlx, MLX_KEY_X))
+        fractal->julia_x += 0.005;
+
+    if (mlx_is_key_down(fractal->mlx, MLX_KEY_C))
+        fractal->julia_y += 0.01;
+
+    if (mlx_is_key_down(fractal->mlx, MLX_KEY_V))
+        fractal->julia_y -= 0.01;
 }

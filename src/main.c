@@ -1,50 +1,8 @@
 #include "../includes/ft_fractol.h"
 
 // ================================ JULIA ===========================
-// void draw_julia(void *p)
-// {
-//     t_fractal *fractal;
-//     fractal = p;
 
-//     fractal->y_coord = 0;
-//     fractal->x_coord = 0; 
-//     double x;
-//     double y;
-//     double temp;
-//     int i;
-    
-//     while (fractal->y_coord < 4 * fractal->n)
-//     {
-//         y = 2 - (fractal->y_coord / fractal->n);
-//         while (fractal->x_coord < 4 * fractal->n)
-//         {
-//             x = - 2 + (fractal->x_coord / fractal->n);
-//             fractal->a_real = x/fractal->zoom - fractal->offset_x;
-//             fractal->b_img = y/fractal->zoom - fractal->offset_y;
-//             i = 1;
-//             while(i <= fractal->max_iterations)
-//             {
-//                 temp = fractal->a_real;
-//                 fractal->a_real = (fractal->a_real * fractal->a_real) - (fractal->b_img * fractal->b_img) + fractal->julia_x;
-//                 fractal->b_img = (2 * temp * fractal->b_img) + fractal->julia_y;
-//                 if ((fractal->a_real * fractal->a_real) + (fractal->b_img * fractal->b_img) > 4)
-//                     break; 
-//                 i++;
-//             }
-//             if (i == fractal->max_iterations + 1)
-//                 mlx_put_pixel(fractal->img, fractal->x_coord, fractal->y_coord, foo(i + 050)); //black
-//             else
-//                 // mlx_put_pixel(fractal->img, fractal->x_coord, fractal->y_coord,  0xFFFFFFFF); //white
-//                 mlx_put_pixel(fractal->img, fractal->x_coord, fractal->y_coord,  foo(i + 500)); //colored
-//             fractal->x_coord++;
-//         }
-//         fractal->x_coord = 0;
-//         fractal->y_coord++;
-//     }
-//     mlx_image_to_window(fractal->mlx, fractal->img, 0, 0);
-// }
-
-void draw_julia_2(void *p)
+void draw_julia(void *p)
 {
     t_fractal *f;
     f = p;
@@ -82,7 +40,6 @@ void draw_julia_2(void *p)
     }
     mlx_image_to_window(f->mlx, f->img, 0, 0);
 }
-
 
 
 // ================================ MANDELBROT ===========================
@@ -161,7 +118,7 @@ void draw_mandelbox(void *p)
     int i;
     double mr, mi;
     double vx, vy;
-    double scale = 2;
+    double scale = -2;
     double mag;
 
     y = 0;
@@ -187,57 +144,15 @@ void draw_mandelbox(void *p)
                 i++;
             }
             if (i == f->max_iterations + 1)
-                mlx_put_pixel(f->img, x, y, foo(i + 999)); //black
+                mlx_put_pixel(f->img, x, y, foo(i + 50)); //black
             else
-                mlx_put_pixel(f->img, x, y,  foo(i + 746)); //colored
+                mlx_put_pixel(f->img, x, y,  foo(i + 555)); //colored
             x++;
         }
         y++;
     }
     mlx_image_to_window(f->mlx, f->img, 0, 0);
 }
-
-
-
-// void draw_mandelbrot(void *p)
-// {
-//     t_fractal *f;
-//     f = p;
-//     double x = 0;
-//     double y = 0;
-//     double temp;
-//     int i;
-//     double zr, zi;
-    
-//     while (y < 4 * f->n)
-//     {
-//         while (x < 4 * f->n)
-//         {
-// 			zr = f->min_r + (double)x * (f->max_r - f->min_r) / (f->n * 4);
-// 			zi = f->max_i + (double)y * (f->min_i - f->max_i) / (f->n * 4);
-//             i = 1;
-//             f->a_real = 0;
-//             f->b_img = 0;
-//             while(i <= f->max_iterations)
-//             {
-//                 temp = f->a_real;
-//                 f->a_real = (f->a_real * f->a_real) - (f->b_img * f->b_img) + zr;
-//                 f->b_img = (2 * temp * f->b_img) + zi;
-//                 if ((f->a_real * f->a_real) + (f->b_img * f->b_img) > 16)
-//                     break; 
-//                 i++;
-//             }
-//             if (i == f->max_iterations + 1)
-//                 mlx_put_pixel(f->img, x , y, 0xFFFFFFFF); //black
-//             else
-//                 mlx_put_pixel(f->img, x, y,  foo(i + 250)); //colored
-//             x++;
-//         }
-//         x = 0;
-//         y++;
-//     }
-//     mlx_image_to_window(f->mlx, f->img, 0, 0);
-// }
 
 void ft_print_error(int error)
 {
@@ -267,11 +182,14 @@ int32_t    ft_fractal(char set)
     mlx_loop_hook(fractal->mlx, hook, fractal);
 
     if (set == 'J')
-        mlx_loop_hook(fractal->mlx, draw_julia_2, fractal);
+        mlx_loop_hook(fractal->mlx, draw_julia, fractal);
     else if (set == 'M')
+        mlx_loop_hook(fractal->mlx, draw_mandelbrot, fractal);
+    else if (set == 'B')
         mlx_loop_hook(fractal->mlx, draw_mandelbox, fractal);
         
     mlx_scroll_hook(fractal->mlx, scrollfunc, fractal);
+    mlx_loop_hook(fractal->mlx, move_julia, fractal);
 	mlx_loop(fractal->mlx);
 	// mlx_delete_image(fractal->mlx, fractal->img);
 	mlx_terminate(fractal->mlx);
@@ -288,7 +206,7 @@ int32_t	main(int argc, char **argv)
         return (0);
     }
     set = argv[1][0];
-    if ((set == 'J' && argv[1][1] == '\0') || (set == 'M' && argv[1][1] == '\0'))
+    if ((set == 'J' && argv[1][1] == '\0') || (set == 'M' && argv[1][1] == '\0') || (set == 'B' && argv[1][1] == '\0'))
         return(ft_fractal(set));
     else 
     {
