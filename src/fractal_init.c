@@ -11,4 +11,6 @@ void    fractal_init(t_fractal *fractal)
 	fractal->min_r = -2.0;
 	fractal->max_r = 2.0;
     fractal->max_i = 2.0;
+
+    fractal->color_shift = 0;
 }

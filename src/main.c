@@ -31,9 +31,9 @@ void draw_julia(void *p)
                 i++;
             }
             if (i == f->max_iterations + 1)
-                mlx_put_pixel(f->img, x, y, foo(i + 999)); //black
+                mlx_put_pixel(f->img, x, y, foo(i + f->color_shift)); //black
             else
-                mlx_put_pixel(f->img, x, y,  foo(i + 746)); //colored
+                mlx_put_pixel(f->img, x, y,  foo(i + f->color_shift + 100)); //colored
             x++;
         }
         y++;
@@ -75,9 +75,9 @@ void draw_mandelbrot(void *p)
                 i++;
             }
             if (i == f->max_iterations + 1)
-                mlx_put_pixel(f->img, x, y, foo(i + 999)); //black
+                mlx_put_pixel(f->img, x, y, foo(i + f->color_shift)); //black
             else
-                mlx_put_pixel(f->img, x, y,  foo(i + 746)); //colored
+                mlx_put_pixel(f->img, x, y,  foo(i + f->color_shift + 200)); //colored
             x++;
         }
         y++;
@@ -144,9 +144,9 @@ void draw_mandelbox(void *p)
                 i++;
             }
             if (i == f->max_iterations + 1)
-                mlx_put_pixel(f->img, x, y, foo(i + 50)); //black
+                mlx_put_pixel(f->img, x, y, foo(i + f->color_shift)); //black
             else
-                mlx_put_pixel(f->img, x, y,  foo(i + 555)); //colored
+                mlx_put_pixel(f->img, x, y,  foo(i + f->color_shift + 100)); //colored
             x++;
         }
         y++;
@@ -189,10 +189,12 @@ int32_t    ft_fractal(char set)
         mlx_loop_hook(fractal->mlx, draw_mandelbox, fractal);
         
     mlx_scroll_hook(fractal->mlx, scrollfunc, fractal);
+    mlx_loop_hook(fractal->mlx, color_shift, fractal);
     mlx_loop_hook(fractal->mlx, move_julia, fractal);
 	mlx_loop(fractal->mlx);
-	// mlx_delete_image(fractal->mlx, fractal->img);
+	mlx_delete_image(fractal->mlx, fractal->img);
 	mlx_terminate(fractal->mlx);
+    free(fractal);
     return (EXIT_SUCCESS);
 }
 
