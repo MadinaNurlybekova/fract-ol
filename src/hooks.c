@@ -15,21 +15,23 @@ void hook(void *ptr)
 		f->min_r -= center_r * distance;
 		f->max_r -= center_r * distance;
 	}
-	else if (mlx_is_key_down(f->mlx, MLX_KEY_LEFT))
+	if (mlx_is_key_down(f->mlx, MLX_KEY_LEFT))
 	{
 		f->min_r += center_r * distance;
 		f->max_r += center_r * distance;
 	}
-	else if (mlx_is_key_down(f->mlx, MLX_KEY_DOWN))
+	if (mlx_is_key_down(f->mlx, MLX_KEY_DOWN))
 	{
 		f->min_i += center_i * distance;
 		f->max_i += center_i * distance;
 	}
-	else if (mlx_is_key_down(f->mlx, MLX_KEY_UP))
+	if (mlx_is_key_down(f->mlx, MLX_KEY_UP))
 	{
 		f->min_i -= center_i * distance;
 		f->max_i -= center_i * distance;
 	}
+	if (mlx_is_key_down(f->mlx, MLX_KEY_ESCAPE))
+		mlx_close_window(f->mlx);
 }
 
 static void	zoom(t_fractal *f, double zoom)

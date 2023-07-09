@@ -6,7 +6,7 @@
 /*   By: mnurlybe <mnurlybe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:35:55 by mnurlybe          #+#    #+#             */
-/*   Updated: 2023/07/08 19:42:30 by mnurlybe         ###   ########.fr       */
+/*   Updated: 2023/07/09 12:17:57 by mnurlybe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef struct s_fractal
 	  double	max_r;
 	  double	min_i;
 	  double	max_i;
+
+    double color_shift; 
     
 } t_fractal;
 
@@ -63,6 +65,7 @@ int32_t    ft_fractal(char set);
 
 // colors
 int foo(int continuous_index);
+void    color_shift(void *p);
 
 // hooks
 void hook(void *ptr);
