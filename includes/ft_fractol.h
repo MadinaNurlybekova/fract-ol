@@ -6,7 +6,7 @@
 /*   By: mnurlybe <mnurlybe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/07 13:35:55 by mnurlybe          #+#    #+#             */
-/*   Updated: 2023/07/09 12:17:57 by mnurlybe         ###   ########.fr       */
+/*   Updated: 2023/07/09 14:44:33 by mnurlybe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <math.h>
-# include "../MLX42/include/MLX42/MLX42.h"
+# include "MLX42.h"
+// # include "../printf/ft_printf.h"
+# include "ft_printf.h"
 
 typedef struct s_fractal
 { 
     mlx_image_t *img;
-    // int img_w;
-    long long max_iterations;
-    // int img_h;
     mlx_t *mlx;
+    double n;
+    long long max_iterations;
     double a_real;
     double b_img;
-    double n;
     double julia_x;
     double julia_y;
 
@@ -38,6 +38,7 @@ typedef struct s_fractal
 	  double	max_i;
 
     double color_shift; 
+    char type;
     
 } t_fractal;
 
@@ -60,8 +61,8 @@ void draw_mandelbrot(void *p);
 void draw_mandelbox(void *p);
 void    fractal_init(t_fractal *fractal);
 void    ft_error(void);
-void        ft_print_error(int error);
-int32_t    ft_fractal(char set);
+void ft_print_error();
+int32_t    ft_fractal(char *set);
 
 // colors
 int foo(int continuous_index);

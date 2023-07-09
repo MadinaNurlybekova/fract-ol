@@ -118,7 +118,7 @@ void draw_mandelbox(void *p)
     int i;
     double mr, mi;
     double vx, vy;
-    double scale = -2;
+    double scale = 2.0;
     double mag;
 
     y = 0;
@@ -154,19 +154,8 @@ void draw_mandelbox(void *p)
     mlx_image_to_window(f->mlx, f->img, 0, 0);
 }
 
-void ft_print_error(int error)
-{
-    if (error == 1)
-    {
-        write(1, "Incorrent amount of arguments\n", 30);
-    }
-    if (error == 2)
-    {
-        write(1, "Wrong input\n", 12);
-    }
-}
 
-int32_t    ft_fractal(char set)
+int32_t    ft_fractal(char *set)
 {
     t_fractal *fractal;
     fractal = malloc(sizeof(t_fractal));
@@ -181,38 +170,73 @@ int32_t    ft_fractal(char set)
 
     mlx_loop_hook(fractal->mlx, hook, fractal);
 
-    if (set == 'J')
+    if (set[0] == 'J'){
+
+        if (set[1] == '1')
+        {
+            fractal->julia_x = 0.285;
+            fractal->julia_y = 0.01;
+        } else if (set[1] == '2')
+        {
+            fractal->julia_x = 0.0;
+            fractal->julia_y = 0.8;
+        } else if (set[1] == '3'){
+            fractal->julia_x = -0.8;
+            fractal->julia_y = 0.156;
+        }
+        fractal->type = 'J';
         mlx_loop_hook(fractal->mlx, draw_julia, fractal);
-    else if (set == 'M')
+    }
+    else if (set[0] == 'M')
+    {
+        fractal->type = 'M';
         mlx_loop_hook(fractal->mlx, draw_mandelbrot, fractal);
-    else if (set == 'B')
+    }
+    else if (set[0] == 'B')
+    {
+        fractal->type = 'B';
         mlx_loop_hook(fractal->mlx, draw_mandelbox, fractal);
+    }
         
     mlx_scroll_hook(fractal->mlx, scrollfunc, fractal);
     mlx_loop_hook(fractal->mlx, color_shift, fractal);
     mlx_loop_hook(fractal->mlx, move_julia, fractal);
 	mlx_loop(fractal->mlx);
 	mlx_delete_image(fractal->mlx, fractal->img);
+    mlx_close_window(fractal->mlx);
 	mlx_terminate(fractal->mlx);
     free(fractal);
     return (EXIT_SUCCESS);
 }
 
+void ft_print_error()
+{
+    ft_printf("\nWrong input!\n");
+    ft_printf("\n===== Available Fractal Sets =====\n\n");    
+    ft_printf("Type M to display Mandelbrot set\n");
+    ft_printf("Type J1, J2 or J3 to display Julia set\n");
+    ft_printf("Type B to display Mandelbox set\n\n"); 
+
+    ft_printf("===== Additional features ======\n]n");
+    ft_printf("Z, X, C and V: change Julia set parameters\n");
+    ft_printf("SPACE KEY: color shift\n");
+    ft_printf("ARROWS KEYS: move the view\n");
+    ft_printf("MOUSE SCROLL: zoom in and out\n\n");
+}
+
 int32_t	main(int argc, char **argv)
 {
-    char set;
-
-    if (argc != 2)
+    if (argc == 2)
     {
-        ft_print_error(1);
-        return (0);
+        if (!(ft_strncmp(argv[1], "J1", 3)) || !(ft_strncmp(argv[1], "J2", 3)) 
+            || !(ft_strncmp(argv[1], "J3", 3)) 
+            || !(ft_strncmp(argv[1], "M", 2)) || !(ft_strncmp(argv[1], "B", 2)))
+            return(ft_fractal(argv[1]));
+        else 
+            ft_print_error();
     }
-    set = argv[1][0];
-    if ((set == 'J' && argv[1][1] == '\0') || (set == 'M' && argv[1][1] == '\0') || (set == 'B' && argv[1][1] == '\0'))
-        return(ft_fractal(set));
     else 
-    {
-        ft_print_error(2);
-        return (0);
-    }
+        ft_print_error();
+    return (0);
 }
+
