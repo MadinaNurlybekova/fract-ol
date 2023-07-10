@@ -6,7 +6,7 @@
 /*   By: mnurlybe <mnurlybe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 19:16:51 by mnurlybe          #+#    #+#             */
-/*   Updated: 2023/07/10 20:26:26 by mnurlybe         ###   ########.fr       */
+/*   Updated: 2023/07/10 21:19:58 by mnurlybe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	ft_print_error(void)
 	ft_printf("Type M to display Mandelbrot set\n");
 	ft_printf("Type J1, J2 or J3 to display Julia set\n");
 	ft_printf("Type B to display Mandelbox set\n\n");
-	ft_printf("===== Additional features ======\n]n");
+	ft_printf("===== Additional features ======\n\n");
 	ft_printf("Z, X, C and V: change Julia set parameters\n");
 	ft_printf("SPACE KEY: color shift\n");
 	ft_printf("ARROWS KEYS: move the view\n");
