@@ -1,17 +1,13 @@
 NAME = fractol
 
 SRC_DIR = src
-STACK_DIR = $(SRC_DIR)/stack
-ALGORITHM_DIR = $(SRC_DIR)/algorithm
-UTILS_DIR = $(SRC_DIR)/utils
-
-SOURCES = $(wildcard $(SRC_DIR)/*.c)
+OBJ_DIR = obj
 
 CFLAGS = -Wall -Wextra -Werror
 LIBFLAGS = -L. -lmlx42 -lftprintf -lft -ldl -lglfw -pthread -lm
 MY_HEADER = ./includes/
 
-OBJ_DIR = obj
+SOURCES = $(wildcard $(SRC_DIR)/*.c)
 OBJECTS = $(addprefix $(OBJ_DIR)/,$(notdir $(SOURCES:.c=.o)))
 
 .PHONY: all clean fclean re
