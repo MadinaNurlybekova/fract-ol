@@ -6,7 +6,7 @@
 /*   By: mnurlybe <mnurlybe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 20:19:12 by mnurlybe          #+#    #+#             */
-/*   Updated: 2023/07/10 21:02:30 by mnurlybe         ###   ########.fr       */
+/*   Updated: 2023/07/11 17:40:03 by mnurlybe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ void	draw_fractal(void *p)
 
 	f = p;
 	y = 0;
-	while (y++ < f->n)
+	while (y < f->n)
 	{
 		x = 0;
-		while (x++ < f->n)
+		while (x < f->n)
 		{
 			f->a_real = f->x_min + (double)x * (f->x_max - f->x_min) / f->n;
 			f->b_img = f->y_max + (double)y * (f->y_min - f->y_max) / f->n;
@@ -35,7 +35,9 @@ void	draw_fractal(void *p)
 			else if (f->set == 'B')
 				i = calculate_mandelbox_set(f);
 			ft_colorize(f, x, y, i);
+			x++;
 		}
+		y++;
 	}
 	mlx_image_to_window(f->mlx, f->img, 0, 0);
 }

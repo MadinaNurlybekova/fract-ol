@@ -6,7 +6,7 @@
 /*   By: mnurlybe <mnurlybe@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/10 18:48:58 by mnurlybe          #+#    #+#             */
-/*   Updated: 2023/07/10 21:04:52 by mnurlybe         ###   ########.fr       */
+/*   Updated: 2023/07/11 17:45:10 by mnurlybe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	rgb(int i)
 	c.channels[0] = (unsigned char)(sin(0.016 * i + 4) * 125 + 255);
 	c.channels[1] = (unsigned char)(sin(0.013 * i + 2) * 125 + 255);
 	c.channels[2] = (unsigned char)(sin(0.01 * i + 1) * 125 + 255);
-	c.channels[3] = 100;
+	c.channels[3] = 80;
 	return (c.number);
 }
 
@@ -37,5 +37,5 @@ void	ft_colorize(t_fractal *f, int x, int y, int i)
 	if (i == f->y_maxterations + 1)
 		mlx_put_pixel(f->img, x, y, rgb(i + f->color_shift));
 	else
-		mlx_put_pixel(f->img, x, y, rgb(i + f->color_shift + 255));
+		mlx_put_pixel(f->img, x, y, rgb(i + f->color_shift + 200));
 }
